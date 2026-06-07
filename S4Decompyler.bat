@@ -3,29 +3,24 @@
 setlocal enabledelayedexpansion
 SET VERSION=0.0.1
 
+:loop_user_method_selection
+cls
 CALL :Tittle
-
 CALL :ZipMethod
-echo User choice is: %choice%
+echo Method selected: %choice%
+timeout 2 >nul 2>&1
 
-echo [WARNING] 
-echo This script assumes that those files are in ./GameFiles folder :
-echo     + core.zip, 
-echo     + base.zip,
-echo     + simulation.zip 
-echo.
-echo Check the Sims 4 folder at 'C:\Program Files\EA Games\The Sims 4\Data\Simulation\Gameplay'
-echo Copy and paste these files in ./GameFiles with this script in ./.
-echo.
-echo Tap on any key to continue..
-pause >nul 2>&1
-echo.
+if "%choice%"=="1" CALL :Method1_AutoS4PathDetection
+if "%choice%"=="2" CALL :Method2_UserS4Path
+if "%choice%"=="3" CALL :Method3_waiting_for_zip
+goto :loop_user_method_selection
 
 
 
 :: ------------------------------------------------------------------------------------------------
 :: 1. Detect uncompyle6 / decompile3
 :: ------------------------------------------------------------------------------------------------
+:DECOMPYLEFILE
 set pyminver=3.7.0
 set dcminver=3.7.6
 set ucminver=3.7.4
@@ -106,6 +101,17 @@ echo OUTPUT : %FINAL_OUTPUT%
 echo TEMP   : %UNZIP_TEMP%
 echo TIME ELAPSED : %ELAPSED%
 echo ==================================================
+pause
+Exit 0
+
+:EndProgramDev
+echo.
+echo  _________________________________________________
+echo ^|                                                 ^|
+echo ^| --^> Please retry and use the method number 3.   ^|
+echo ^|_________________________________________________^| 
+echo.
+echo End of program.
 pause
 Exit 0
 
@@ -261,7 +267,6 @@ echo ___________________________________________________________________________
 exit /b
 
 :Tittle
-cls
 echo _________________________________________________________________________________________
 echo.
 echo                             S4Decompyler - v%VERSION%  
@@ -286,14 +291,28 @@ set /p CHOICE=Please select an option (1, 2 or 3):
 
 exit /b
 
-echo This script assumes that those files are in ./GameFiles folder :
+:Method3_waiting_for_zip
+cls
+echo This method assumes that those files are in ./GameFiles folder :
 echo     + core.zip, 
 echo     + base.zip,
 echo     + simulation.zip 
 echo.
 echo Check the Sims 4 folder at 'C:\Program Files\EA Games\The Sims 4\Data\Simulation\Gameplay'
 echo Copy and paste these files in ./GameFiles with this script in ./.
+echo NOTE : Create the ./GameFiles folder if it does not exist
 echo.
 echo Tap on any key to continue..
 pause >nul 2>&1
 echo.
+exit /b
+
+:Method1_AutoS4PathDetection
+cls
+echo In development
+goto :EndProgramDev
+
+:Method2_UserS4Path
+cls
+echo In development
+goto :EndProgramDev
