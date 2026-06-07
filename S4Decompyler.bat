@@ -4,6 +4,10 @@ setlocal enabledelayedexpansion
 SET VERSION=0.0.1
 
 CALL :Tittle
+
+CALL :ZipMethod
+echo User choice is: %choice%
+
 echo [WARNING] 
 echo This script assumes that those files are in ./GameFiles folder :
 echo     + core.zip, 
@@ -260,7 +264,36 @@ exit /b
 cls
 echo _________________________________________________________________________________________
 echo.
-echo                             S4Decompiler - v%VERSION%  
+echo                             S4Decompyler - v%VERSION%  
 echo _________________________________________________________________________________________
 echo.
 exit /b
+
+:ZipMethod
+echo The first step is to detect the base, core and simultation .zip files.
+echo There is 3 methods available. Select the one you feel more confortable.
+echo.
+echo  [1] Automatic folder detection
+echo      - The script will try to find the folder automatically.
+echo.
+echo  [2] Copy/paste the path folder of your Sims4 executable
+echo      - The script needs the folder where the sims4.exe is to detect it
+echo.
+echo  [3] Manual folder creation
+echo      - A new folder will be created, and you must place your ZIP files inside it.
+echo.
+set /p CHOICE=Please select an option (1, 2 or 3): 
+
+exit /b
+
+echo This script assumes that those files are in ./GameFiles folder :
+echo     + core.zip, 
+echo     + base.zip,
+echo     + simulation.zip 
+echo.
+echo Check the Sims 4 folder at 'C:\Program Files\EA Games\The Sims 4\Data\Simulation\Gameplay'
+echo Copy and paste these files in ./GameFiles with this script in ./.
+echo.
+echo Tap on any key to continue..
+pause >nul 2>&1
+echo.
