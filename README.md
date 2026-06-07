@@ -69,488 +69,157 @@ Once it is done, test directly with your command prompt. You shall see "version 
 decompyle3 --version
 uncompyle6 --version
 ```
-**For the 3th decomplier, this script uses a standalone version of `unpyc3`, not need to be accessible from your PATH.**
+For the 3th decomplier, this script uses a **standalone version** of `unpyc3`, **not need to be accessible from your PATH**.
+
+---
+
+# 📥 Installation
+Clone the repository:
+
+```bash
+git clone https://github.com/xemota-s4/S4-Decompyler.git
+cd Uncompyle_tool
+```
+Create the following directory (version **0.0.1** of the script):
+
+```text
+GameFiles/
+```
+
+Copy the Sims 4 gameplay archives into it:
+```text
+GameFiles/
+├── base.zip
+├── core.zip
+└── simulation.zip
+```
+
+Typical location of these .zip files:
+```text
+C:\\Program Files\\EA Games\\The Sims 4\\Data\\Simulation\\Gameplay
+```
+---
+
+# Usage
+Run:
+
+```bat
+UncompyleSims4.bat
+```
+The script will ask for:
+
+```text
+Output directory name :
+Path where output directory should created :
+```
+Example:
+
+```text
+Output directory name : Sims4Source
+Path where output directory should created : D:\\Projects
+```
+
+Result:
+```text
+D:\\Projects\\Sims4Source
+```
 ---
 
 
 
-\# 📥 Installation
-
-
-
-Clone the repository:
-
-
-
-```bash
-
-git clone https://github.com/yourusername/uncompyle-sims4-game.git
-
-cd uncompyle-sims4-game
-
-```
-
-
-
-Create the following directory:
-
-
+# 📂 Project Structure
 
 ```text
-
-GameFiles/
-
-```
-
-
-
-Copy the Sims 4 gameplay archives into it:
-
-
-
-```text
-
-GameFiles/
-
-├── base.zip
-
-├── core.zip
-
-└── simulation.zip
-
-```
-
-
-
-Typical location:
-
-
-
-```text
-
-C:\\Program Files\\EA Games\\The Sims 4\\Data\\Simulation\\Gameplay
-
-```
-
-
-
-\---
-
-
-
-\# 🚀 Usage
-
-
-
-Run:
-
-
-
-```bat
-
-UncompyleSims4.bat
-
-```
-
-
-
-The script will ask for:
-
-
-
-```text
-
-Output directory name :
-
-Path where output directory should created :
-
-```
-
-
-
-Example:
-
-
-
-```text
-
-Output directory name : Sims4Source
-
-Path where output directory should created : D:\\Projects
-
-```
-
-
-
-Result:
-
-
-
-```text
-
-D:\\Projects\\Sims4Source
-
-```
-
-
-
-\---
-
-
-
-\# 📂 Project Structure
-
-
-
-```text
-
 .
-
 ├── UncompyleSims4.bat
-
 ├── GameFiles
-
 │   ├── base.zip
-
 │   ├── core.zip
-
 │   └── simulation.zip
-
 ├── Uncompiling.log
-
 └── Output
-
-&#x20;   ├── base
-
-&#x20;   ├── core
-
-&#x20;   └── simulation
-
+    ├── base
+    ├── core
+    └── simulation
 ```
+---
 
 
-
-\---
-
-
-
-\# ⚙️ Workflow
-
-
-
+# ⚙️ Workflow
 ```text
-
 ZIP Archives
-
-&#x20;     │
-
-&#x20;     ▼
-
+    │
+    ▼
 Extraction
-
-&#x20;     │
-
-&#x20;     ▼
-
+    │
+    ▼
 Recursive Scan
-
-&#x20;     │
-
-&#x20;     ▼
-
+    │
+    ▼
 decompyle3
-
-&#x20;     │
-
-&#x20;     ├── Success ✔
-
-&#x20;     │
-
-&#x20;     ▼
-
+    │
+    ├── Success ✔
+    │
+    ▼
 uncompyle6
-
-&#x20;     │
-
-&#x20;     ├── Success ✔
-
-&#x20;     │
-
-&#x20;     ▼
-
+    │
+    ├── Success ✔
+    │
+    ▼
 unpyc3
-
-&#x20;     │
-
-&#x20;     ├── Success ✔
-
-&#x20;     │
-
-&#x20;     ▼
-
+    │
+    ├── Success ✔
+    │
+    ▼
 Failed ✖
 
 ```
-
-
-
-\---
+---
 
 
 
 \# 📸 Screenshots
-
-
-
-\### Startup
-
-
-
-```text
-
-\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
-
-
-
-&#x20;     Uncompyle Sims4 Game - v0.0.1
-
-
-
-\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
-
-```
-
-
-
 \### Extraction
-
-
-
 ```text
-
 \[DETECTING] ZIP found : base.zip
-
 \[DETECTING] ZIP found : core.zip
-
 \[DETECTING] ZIP found : simulation.zip
-
 ```
-
-
 
 \### Decompilation
 
-
-
 ```text
-
 \[OK] Decompiled with decompyle3
-
 \[OK] Decompiled with uncompyle6
-
 \[OK] Decompiled with unpyc3
-
 ```
+---
 
 
-
-\---
-
-
-
-\# 📊 Example Results
+# 📊 Example Results
 
 
 
 ```text
-
-\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
-
-
-
+__________________________________________________________________________________
 UNCOMPILING RESULTS
 
-
-
-.pyc files found         : 15234
-
-Successfully decompiled  : 14887
-
-Failed                   : 347
-
-
-
-\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
-
+.pyc files found         : 800
+Successfully decompiled  : 780
+Failed                   : 20
+__________________________________________________________________________________
 ```
+---
 
 
-
-\---
-
-
-
-\# 🗺️ Roadmap
-
-
-
-\## v0.1
-
-
-
-\* \[ ] Proper semantic versioning
-
-\* \[ ] Improved version validation
-
-\* \[ ] Better error handling
-
-\* \[ ] Configuration file support
-
-
-
-\## v0.2
-
-
-
-\* \[ ] Multi-threaded decompilation
-
-\* \[ ] Progress bar
-
-\* \[ ] Colored console output
-
-
-
-\## v0.3
-
-
-
-\* \[ ] Automatic dependency installation
-
-\* \[ ] GUI interface
-
-
-
-\## v1.0
-
-
-
-\* \[ ] Full Sims 4 gameplay package support
-
-\* \[ ] Plugin architecture
-
-\* \[ ] Export reports (HTML / JSON)
-
-
-
-\---
-
-
-
-\# 🤝 Contributing
-
-
-
-Contributions are welcome.
-
-
-
-1\. Fork the repository
-
-2\. Create a feature branch
-
-
-
-```bash
-
-git checkout -b feature/my-feature
-
-```
-
-
-
-3\. Commit your changes
-
-
-
-```bash
-
-git commit -m "Add new feature"
-
-```
-
-
-
-4\. Push your branch
-
-
-
-```bash
-
-git push origin feature/my-feature
-
-```
-
-
-
-5\. Open a Pull Request
-
-
-
-\---
-
-
-
-\# ⚠️ Disclaimer
-
-
+# ⚠️ Disclaimer
 
 This project is intended for:
+* Research
+* Modding analysis
+* give a simple tool to S4 community for modding
 
-
-
-\* Educational purposes
-
-\* Research
-
-\* Modding analysis
-
-\* Understanding Python bytecode structures
-
-
-
-This project is \*\*not affiliated with, endorsed by, or supported by EA Games, Maxis, or Electronic Arts.\*\*
-
-
-
+This project is **not affiliated with, endorsed by, or supported by EA Games, Maxis, or Electronic Arts.**
 Users are responsible for complying with all applicable software licenses, terms of service, and local laws.
 
-
-
-\---
-
-
-
-\# 📄 License
-
-
-
-MIT License
-
-
-
-See the `LICENSE` file for details.
-
-
-
-\---
-
-
-
-<p align="center">
-
-Made with ❤️ for the Sims 4 modding community
-
-</p>
-
-
-
+---
