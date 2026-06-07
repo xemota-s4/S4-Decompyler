@@ -178,20 +178,20 @@ Failed ✖
 
 
 
-\# 📸 Screenshots
-\### Extraction
+# Screenshots
+### Extraction
 ```text
-\[DETECTING] ZIP found : base.zip
-\[DETECTING] ZIP found : core.zip
-\[DETECTING] ZIP found : simulation.zip
+[DETECTING] ZIP found : base.zip
+[DETECTING] ZIP found : core.zip
+[DETECTING] ZIP found : simulation.zip
 ```
 
-\### Decompilation
+### Decompilation
 
 ```text
-\[OK] Decompiled with decompyle3
-\[OK] Decompiled with uncompyle6
-\[OK] Decompiled with unpyc3
+[OK] Decompiled with decompyle3
+[OK] Decompiled with uncompyle6
+[OK] Decompiled with unpyc3
 ```
 ---
 
