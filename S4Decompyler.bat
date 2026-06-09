@@ -1,24 +1,20 @@
 @echo off
 @title 
 setlocal enabledelayedexpansion
-SET VERSION=0.0.1
+SET VERSION=0.0.2
+SET "GAME_FILE=GameFiles"
 
-:loop_user_method_selection
-cls
-CALL :Tittle
-CALL :ZipMethod
-echo Method selected: %choice%
-timeout 2 >nul 2>&1
+:: ------------------------------------------------------------------------------------------------
+:: Detect Gamefiles folder
+:: ------------------------------------------------------------------------------------------------
 
-if "%choice%"=="1" CALL :Method1_AutoS4PathDetection
-if "%choice%"=="2" CALL :Method2_UserS4Path
-if "%choice%"=="3" CALL :Method3_waiting_for_zip
-goto :loop_user_method_selection
-
+if not exist "%GAME_FILE%\" (
+    mkdir %GAME_FILE%
+)
 
 
 :: ------------------------------------------------------------------------------------------------
-:: 1. Detect uncompyle6 / decompile3
+:: 0. Detect uncompyle6 / decompile3
 :: ------------------------------------------------------------------------------------------------
 :DECOMPYLEFILE
 set pyminver=3.7.0
@@ -41,9 +37,31 @@ CALL :VersionCheck "uncompyle6" "%ucp6%" "%ucminver%"
 CALL :VersionCheck "unpyc3" "3.11" "x.xx"
 echo.
 
+if "%PREREQUIRED_NOT_SATIFIED%"=="1" goto :EndProgramFailure
+
+echo Tap on any key to continue..
+timeout 10 >nul 2>&1
+
+:: ------------------------------------------------------------------------------------------------
+:: 1. Method select to detect Zip files
+:: ------------------------------------------------------------------------------------------------
+:loop_user_method_selection
+cls
+CALL :Tittle
+CALL :ZipMethod
+echo Method selected: %choice%
+timeout 2 >nul 2>&1
+
+if "%choice%"=="1" CALL :Method1_AutoS4PathDetection
+if "%choice%"=="2" CALL :Method2_UserS4Path
+if "%choice%"=="3" CALL :Method3_waiting_for_zip
+goto :loop_user_method_selection
+
+
 :: --------------------------------------------------
 :: 2. Ask output folder 
 :: --------------------------------------------------
+:START_PROCESS
 echo Output folder configuration ...
 set /p OUTPUT_NAME=Output directory name : 
 set /p OUTPUT_PATH=Path where output directory should created : 
@@ -104,20 +122,24 @@ echo ==================================================
 pause
 Exit 0
 
+:EndProgramFailure
+echo.
+echo Requires not statisfied. Please fix them, then retry. 
+echo End of program.
+echo.
+pause 
+Exit 0
+
 :EndProgramDev
 echo.
-echo  _________________________________________________
-echo ^|                                                 ^|
-echo ^| --^> Please retry and use the method number 3.   ^|
-echo ^|_________________________________________________^| 
+echo  _______________________________________________________
+echo ^|                                                      ^|
+echo ^| --^> Please retry and use the method number 2 or 3.   ^|
+echo ^|______________________________________________________^| 
 echo.
 echo End of program.
 pause
 Exit 0
-
-
-
-
 
 
 rem ----------------------------------------------------------------------------
@@ -132,6 +154,7 @@ if "%cur_ver%"=="" (
     echo Current : %cur_ver%  [Min : %min_ver%]	
     echo [STATUS] %program% not found
     echo.
+    set "PREREQUIRED_NOT_SATIFIED=1"
     exit /b
 )
 
@@ -165,7 +188,7 @@ rem ----------------------------------------------------------------------------
 :ZipDetectUnzip
 set "output_folder=%~1"
 
-for %%F in (GameFiles\*.zip) do (
+for %%F in (%GAME_FILE%\*.zip) do (
     echo    [DETECTING] ZIP found : %%~nxF
 
     powershell -command ^
@@ -291,6 +314,45 @@ set /p CHOICE=Please select an option (1, 2 or 3):
 
 exit /b
 
+
+:Method1_AutoS4PathDetection
+cls
+echo In development
+goto :EndProgramDev
+
+
+
+
+:Method2_UserS4Path
+cls
+echo Enter the folder path where the TS4_x64.exe is located on your disk.
+set /p "PATH_S4_GAME=directory path: "
+
+rem check the input of the user, if the folder exists
+if not exist "%PATH_S4_GAME%\" (
+    echo ERROR: Directory not found.
+    goto :EndProgramFailure
+)
+
+rem go 2 folders above (Game\Bin -> Sims 4 root)
+for %%I in ("%PATH_S4_GAME%\..\..") do set "GAME_ROOT=%%~fI"
+
+set "GAME_ZIP_PATH=%GAME_ROOT%\Data\Simulation\Gameplay"
+
+rem check if the Gameplay folder exists
+if not exist "%GAME_ZIP_PATH%\" (
+    echo ERROR: Gameplay folder not found.
+    echo Expected location: "%GAME_ZIP_PATH%"
+    goto :EndProgramFailure
+)
+
+rem copy .zip in GameFiles folder 
+echo Copying of .zip files in GameFiles folder [...]
+robocopy "%GAME_ZIP_PATH%" "%GAME_FILE%" *.zip  >nul 2>&1
+
+goto :START_PROCESS
+
+
 :Method3_waiting_for_zip
 cls
 echo This method assumes that those files are in ./GameFiles folder :
@@ -300,19 +362,8 @@ echo     + simulation.zip
 echo.
 echo Check the Sims 4 folder at 'C:\Program Files\EA Games\The Sims 4\Data\Simulation\Gameplay'
 echo Copy and paste these files in ./GameFiles with this script in ./.
-echo NOTE : Create the ./GameFiles folder if it does not exist
 echo.
 echo Tap on any key to continue..
 pause >nul 2>&1
 echo.
-exit /b
-
-:Method1_AutoS4PathDetection
-cls
-echo In development
-goto :EndProgramDev
-
-:Method2_UserS4Path
-cls
-echo In development
-goto :EndProgramDev
+goto :START_PROCESS
