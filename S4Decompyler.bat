@@ -1,8 +1,12 @@
 @echo off
 @title 
 setlocal enabledelayedexpansion
-SET VERSION=0.0.2
+SET VERSION=0.1.0
+rem -----------------------------------------------------------------------------------------------
+rem User can modify those variables accoring to his system
 SET "GAME_FILE=GameFiles"
+rem -----------------------------------------------------------------------------------------------
+
 
 :: ------------------------------------------------------------------------------------------------
 :: Detect Gamefiles folder
@@ -317,10 +321,20 @@ exit /b
 
 :Method1_AutoS4PathDetection
 cls
-echo In development
-goto :EndProgramDev
+echo Search in progress. Please wait while the script looks at the S4 zip files ... 
+echo ______________________________________________________________________________
+echo Note : This process depends on your system setup. It can take several minutes.
+echo ______________________________________________________________________________
 
+for /f "delims=" %%D in ('dir C:\Gameplay /s /b /ad 2^>nul ^| findstr /i "\Simulation\Gameplay"') do (
+    set "TARGET=%%D"
+)
+echo.
+echo Path found : %TARGET%
+echo.
+call :CopyZipFiles "%TARGET%"
 
+exit /b
 
 
 :Method2_UserS4Path
@@ -337,33 +351,41 @@ if not exist "%PATH_S4_GAME%\" (
 rem go 2 folders above (Game\Bin -> Sims 4 root)
 for %%I in ("%PATH_S4_GAME%\..\..") do set "GAME_ROOT=%%~fI"
 
-set "GAME_ZIP_PATH=%GAME_ROOT%\Data\Simulation\Gameplay"
+set "GAMEZIPPATH=%GAME_ROOT%\Data\Simulation\Gameplay"
 
 rem check if the Gameplay folder exists
-if not exist "%GAME_ZIP_PATH%\" (
+if not exist "%GAMEZIPPATH%\" (
     echo ERROR: Gameplay folder not found.
-    echo Expected location: "%GAME_ZIP_PATH%"
+    echo Expected location: "%GAMEZIPPATH%"
     goto :EndProgramFailure
 )
+call :CopyZipFiles "%GAMEZIPPATH%"
 
+exit /b
+
+
+:Method3_waiting_for_zip
+cls
+echo This method assumes that those files are in .\GameFiles folder :
+echo     + core.zip, 
+echo     + base.zip,
+echo     + simulation.zip 
+echo.
+echo Check the Sims 4 folder at 'C:\Program Files\EA Games\The Sims 4\Data\Simulation\Gameplay'
+echo Copy and paste these files in .\GameFiles with this script in ./.
+echo.
+echo Tap on any key to continue..
+pause >nul 2>&1
+echo.
+goto :START_PROCESS
+
+
+
+:CopyZipFiles
+SET "GAME_ZIP_PATH=%~1"
 rem copy .zip in GameFiles folder 
 echo Copying of .zip files in GameFiles folder [...]
 robocopy "%GAME_ZIP_PATH%" "%GAME_FILE%" *.zip  >nul 2>&1
 
 goto :START_PROCESS
 
-
-:Method3_waiting_for_zip
-cls
-echo This method assumes that those files are in ./GameFiles folder :
-echo     + core.zip, 
-echo     + base.zip,
-echo     + simulation.zip 
-echo.
-echo Check the Sims 4 folder at 'C:\Program Files\EA Games\The Sims 4\Data\Simulation\Gameplay'
-echo Copy and paste these files in ./GameFiles with this script in ./.
-echo.
-echo Tap on any key to continue..
-pause >nul 2>&1
-echo.
-goto :START_PROCESS

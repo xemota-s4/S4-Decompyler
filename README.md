@@ -1,7 +1,7 @@
 #  S4Decompiler
 
 <p align="rigth">
-&#x20; <img src="https://img.shields.io/badge/version-0.0.1-blue.svg" />
+&#x20; <img src="https://img.shields.io/badge/version-0.1.0-blue.svg" />
 &#x20; <img src="https://img.shields.io/badge/platform-Windows-green.svg" />
 &#x20; <img src="https://img.shields.io/badge/python-3.7%2B-yellow.svg" />
 &#x20; <img src="https://img.shields.io/badge/license-MIT-orange.svg" />
