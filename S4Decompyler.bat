@@ -22,10 +22,10 @@ if not exist "%GAME_FILE%\" (
 set pyminver=3.7.0
 set dcminver=3.7.6
 set ucminver=3.7.4
-set version_required=3.9.0
+set "version_required=3.9.0"
 
 CALL :RunRequirementDetectiion 
-if "%PREREQUIRED_NOT_SATISFIED%"=="1" goto :InstallRequirements "%version_required%"
+if "%PREREQUIRED_NOT_SATISFIED%"=="1" CALL :InstallRequirements "%version_required%"
 
 echo Tap on any key to continue..
 timeout 10 >nul 2>&1
@@ -138,7 +138,7 @@ set "min_ver=%~3"
 
 echo Checking %program% version
 
-if "%cur_ver%"=="*" (
+if "%cur_ver%"=="" (
     echo Current : %cur_ver%  [Min : %min_ver%]	
     echo [STATUS] %program% not found
     echo.
@@ -377,12 +377,16 @@ goto :START_PROCESS
 :InstallRequirements
     SET "VERSION_TO_INSTALL=%~1"
     echo.
-    echo Requirements are not satisfied --^> Installation required.
-    pause
+    echo Requirements are not satisfied
+    echo  --^> Installation required.
+  
+    rem installation of both 
     echo Installation of Uncompyle6 [PLEASE WAIT]
-    pip install uncompyle6==%VERSION_TO_INSTALL% -y >nul 2>&1
+    pip install uncompyle6==%VERSION_TO_INSTALL% 
+    timeout 2 >nul 2>&1
     echo Installation of Decomplyle3 [...] 
-    pip install decompyle3==%VERSION_TO_INSTALL% >nul 2>&1
+    pip install decompyle3==%VERSION_TO_INSTALL% 
+    timeout 2 >nul 2>&1
 
     rem Installation checking, if there is an error the program is skipped
     CALL :RunRequirementDetectiion
@@ -414,12 +418,12 @@ exit /b
         exit /b 1
     )
 
-
+    SET PREREQUIRED_NOT_SATISFIED=0
     rem version check now in a function (tm)
     CALL :VersionCheck python "%py3%" "%pyminver%"
     CALL :VersionCheck "decompyle3" "%dcp3%" "%dcminver%"
     CALL :VersionCheck "uncompyle6" "%ucp6%" "%ucminver%"
     CALL :VersionCheck "unpyc3" "3.11" "x.xx"
     echo.
-
+    
 exit /b
