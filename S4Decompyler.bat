@@ -7,7 +7,6 @@ rem User can modify those variables accoring to his system
 SET "GAME_FILE=GameFiles"
 rem -----------------------------------------------------------------------------------------------
 
-
 :: ------------------------------------------------------------------------------------------------
 :: Detect Gamefiles folder
 :: ------------------------------------------------------------------------------------------------
@@ -16,7 +15,6 @@ if not exist "%GAME_FILE%\" (
     mkdir %GAME_FILE%
 )
 
-
 :: ------------------------------------------------------------------------------------------------
 :: 0. Detect uncompyle6 / decompile3
 :: ------------------------------------------------------------------------------------------------
@@ -24,24 +22,10 @@ if not exist "%GAME_FILE%\" (
 set pyminver=3.7.0
 set dcminver=3.7.6
 set ucminver=3.7.4
+set version_required=3.9.0
 
-FOR /F "tokens=* USEBACKQ" %%F IN (`py --version`) DO (SET py3=%%F)
-set "py3=%py3:* =%"
-
-FOR /F "tokens=* USEBACKQ" %%F IN (`decompyle3.exe --version`) DO (SET dcp3=%%F)
-set "dcp3=%dcp3:* =%"
-
-FOR /F "tokens=* USEBACKQ" %%F IN (`uncompyle6.exe --version`) DO (SET ucp6=%%F)
-set "ucp6=%ucp6:* =%"
-
-rem version check now in a function (tm)
-CALL :VersionCheck python "%py3%" "%pyminver%"
-CALL :VersionCheck "decompyle3" "%dcp3%" "%dcminver%"
-CALL :VersionCheck "uncompyle6" "%ucp6%" "%ucminver%"
-CALL :VersionCheck "unpyc3" "3.11" "x.xx"
-echo.
-
-if "%PREREQUIRED_NOT_SATIFIED%"=="1" goto :EndProgramFailure
+CALL :RunRequirementDetectiion 
+if "%PREREQUIRED_NOT_SATISFIED%"=="1" goto :InstallRequirements "%version_required%"
 
 echo Tap on any key to continue..
 timeout 10 >nul 2>&1
@@ -158,7 +142,7 @@ if "%cur_ver%"=="" (
     echo Current : %cur_ver%  [Min : %min_ver%]	
     echo [STATUS] %program% not found
     echo.
-    set "PREREQUIRED_NOT_SATIFIED=1"
+    set "PREREQUIRED_NOT_SATISFIED=1"
     exit /b
 )
 
@@ -389,3 +373,37 @@ robocopy "%GAME_ZIP_PATH%" "%GAME_FILE%" *.zip  >nul 2>&1
 
 goto :START_PROCESS
 
+
+:InstallRequirements
+    SET "VERSION_TO_INSTALL=%~1"
+    echo.
+    echo Requirements are not satisfied --^> Installation required.
+    echo Installation of Uncompyle6 [PLEASE WAIT]
+    pip install uncompyle6==%VERSION_TO_INSTALL% -y >nul 2>&1
+    echo Installation of Decomplyle3 [...] 
+    pip install decompyle3==%VERSION_TO_INSTALL% >nul 2>&1
+
+    rem Installation checking, if there is an error the program is skipped
+    CALL :RunRequirementDetectiion
+    if "%PREREQUIRED_NOT_SATISFIED%"=="1" goto :EndProgramFailure
+
+exit /b
+
+:RunRequirementDetectiion 
+    FOR /F "tokens=* USEBACKQ" %%F IN (`py --version`) DO (SET py3=%%F)
+    set "py3=%py3:* =%"
+
+    FOR /F "tokens=* USEBACKQ" %%F IN (`decompyle3.exe --version`) DO (SET dcp3=%%F)
+    set "dcp3=%dcp3:* =%"
+
+    FOR /F "tokens=* USEBACKQ" %%F IN (`uncompyle6.exe --version`) DO (SET ucp6=%%F)
+    set "ucp6=%ucp6:* =%"
+
+    rem version check now in a function (tm)
+    CALL :VersionCheck python "%py3%" "%pyminver%"
+    CALL :VersionCheck "decompyle3" "%dcp3%" "%dcminver%"
+    CALL :VersionCheck "uncompyle6" "%ucp6%" "%ucminver%"
+    CALL :VersionCheck "unpyc3" "3.11" "x.xx"
+    echo.
+
+exit /b
