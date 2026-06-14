@@ -138,7 +138,7 @@ set "min_ver=%~3"
 
 echo Checking %program% version
 
-if "%cur_ver%"=="" (
+if "%cur_ver%"=="*" (
     echo Current : %cur_ver%  [Min : %min_ver%]	
     echo [STATUS] %program% not found
     echo.
@@ -378,6 +378,7 @@ goto :START_PROCESS
     SET "VERSION_TO_INSTALL=%~1"
     echo.
     echo Requirements are not satisfied --^> Installation required.
+    pause
     echo Installation of Uncompyle6 [PLEASE WAIT]
     pip install uncompyle6==%VERSION_TO_INSTALL% -y >nul 2>&1
     echo Installation of Decomplyle3 [...] 
@@ -393,11 +394,26 @@ exit /b
     FOR /F "tokens=* USEBACKQ" %%F IN (`py --version`) DO (SET py3=%%F)
     set "py3=%py3:* =%"
 
+    where /q decompyle3.exe
+    if errorlevel 1 (
+        echo ERREUR: decompyle3 is not installed or in the path
+        SET PREREQUIRED_NOT_SATISFIED=1
+        exit /b 1
+    )
+
     FOR /F "tokens=* USEBACKQ" %%F IN (`decompyle3.exe --version`) DO (SET dcp3=%%F)
     set "dcp3=%dcp3:* =%"
 
+
     FOR /F "tokens=* USEBACKQ" %%F IN (`uncompyle6.exe --version`) DO (SET ucp6=%%F)
     set "ucp6=%ucp6:* =%"
+    where /q uncompyle6.exe
+    if errorlevel 1 (
+        echo ERREUR: uncompyle6 is not installed or in the path.
+        SET PREREQUIRED_NOT_SATISFIED=1
+        exit /b 1
+    )
+
 
     rem version check now in a function (tm)
     CALL :VersionCheck python "%py3%" "%pyminver%"
