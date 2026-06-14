@@ -1,25 +1,31 @@
 #  S4Decompiler
 
 <p align="rigth">
-&#x20; <img src="https://img.shields.io/badge/version-0.1.0-blue.svg" />
+&#x20; <img src="https://img.shields.io/badge/version-0.1.1-blue.svg" />
 &#x20; <img src="https://img.shields.io/badge/platform-Windows-green.svg" />
 &#x20; <img src="https://img.shields.io/badge/python-3.7%2B-yellow.svg" />
 &#x20; <img src="https://img.shields.io/badge/license-MIT-orange.svg" />
 </p>
 
 
+The Sims 4 stores gameplay logic in compiled Python bytecode. This library contains all the stuff for modding the game. This tool helps modders and researchers inspect game behavior and create thier own content for the Sims 4.
+
+What about this script ? 
 Automatically extract and decompile Python bytecode (`.pyc`) files from **The Sims 4** gameplay archives.
 This utility streamlines the reverse-engineering workflow by:
 
+* Detection of tools needed
 * Extracting game archives (`base.zip`, `core.zip`, `simulation.zip`)
 * Scanning all extracted directories recursively
 * Decompiling `.pyc` files using multiple fallback engines
 * Generating execution logs and statistics
 * Measuring total execution time
+
 ---
 
 
 ## 📖 How to read this readme
+* [Limitation](#-limitation)
 * [Features](#-features)
 * [Requirements](#-requirements)
 * [Installation](#-installation)
@@ -30,13 +36,24 @@ This utility streamlines the reverse-engineering workflow by:
 * [Roadmap](#️-roadmap)
 * [Contributing](#-contributing)
 * [Disclaimer](#️-disclaimer)
-* [License](#-license)
 ---
 
+# ❗ Limitation
+* Windows-only tool (Batch + PowerShell)
+* Requires installed Python environment (3.7.x)
+* Depends on external decompilation tools
+* Performance varies depending on your system setup
+---
 
 # ✨ Features
+* Automatic detection of programs needed
+* Automatic installation of uncompyle6 and decompyle3
 * Automatic ZIP archive extraction
 * Recursive `.pyc` discovery
+* Multiple mods to discover S4 folder and archives :
+    - Auto detection of S4 folder and archives
+    - Copy/past archives in the ./GameFiles folder
+    - Assume that archives are already in ./GameFiles folder
 * Multiple decompilation engines:
     - decompyle3
     - uncompyle6
@@ -45,6 +62,7 @@ This utility streamlines the reverse-engineering workflow by:
 * Success / failure statistics
 * Execution time measurement
 * Simple Windows Batch implementation
+* Prematured exit of program if there is a fatal error
 ---
 
 
@@ -56,20 +74,21 @@ This utility streamlines the reverse-engineering workflow by:
 * Python 3.7+
 * PowerShell
 
-## Python Packages
+## Python Packages (tested)
 ```bash
 pip install decompyle3==3.9.0
 pip install uncompyle6==3.9.0
 ```
-Those scripts are saved in the ./scripts folder of your python installation directory.
-Please save them inside the PATH environmental variable.  
+Those programs are saved in the ./scripts folder of your python installation directory.
+Please save them inside the PATH environmental variable. 
+Default path :  C:\Users\...\AppData\Roaming\Python\Python37\Scripts
 Once it is done, test directly with your command prompt. You shall see "version 3.9.0".
 
 ```bash
 decompyle3 --version
 uncompyle6 --version
 ```
-For the 3th decomplier, this script uses a **standalone version** of `unpyc3`, **not need to be accessible from your PATH**.
+For the third decomplier, this script uses a **standalone version** of `unpyc3`, **not need to be accessible from your PATH**.
 
 ---
 
@@ -104,7 +123,7 @@ C:\\Program Files\\EA Games\\The Sims 4\\Data\\Simulation\\Gameplay
 Run:
 
 ```bat
-UncompyleSims4.bat
+S4Decompyler.bat
 ```
 The script will ask for:
 
@@ -131,13 +150,13 @@ D:\\Projects\\Sims4Source
 
 ```text
 .
-├── UncompyleSims4.bat
+├── S4Decompyler.bat
 ├── GameFiles
 │   ├── base.zip
 │   ├── core.zip
 │   └── simulation.zip
 ├── Uncompiling.log
-└── Output
+└── Output (set by user)
     ├── base
     ├── core
     └── simulation
@@ -147,6 +166,12 @@ D:\\Projects\\Sims4Source
 
 # ⚙️ Workflow
 ```text
+Tool version detection
+    │
+    ▼
+Installation of tools if available
+    │
+    ▼
 ZIP Archives
     │
     ▼
@@ -176,8 +201,6 @@ Failed ✖
 ```
 ---
 
-
-
 # Screenshots
 ### Extraction
 ```text
@@ -187,7 +210,6 @@ Failed ✖
 ```
 
 ### Decompilation
-
 ```text
 [OK] Decompiled with decompyle3
 [OK] Decompiled with uncompyle6
@@ -196,10 +218,7 @@ Failed ✖
 ---
 
 
-# 📊 Example Results
-
-
-
+# 📊 Result Example
 ```text
 __________________________________________________________________________________
 UNCOMPILING RESULTS
@@ -217,7 +236,7 @@ ________________________________________________________________________________
 This project is intended for:
 * Research
 * Modding analysis
-* give a simple tool to S4 community for modding
+* provides a simple tool to S4 community for modding
 
 This project is **not affiliated with, endorsed by, or supported by EA Games, Maxis, or Electronic Arts.**
 Users are responsible for complying with all applicable software licenses, terms of service, and local laws.
