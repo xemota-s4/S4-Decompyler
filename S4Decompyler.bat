@@ -1,7 +1,7 @@
 @echo off
 @title 
 setlocal enabledelayedexpansion
-SET VERSION=0.1.0
+SET VERSION=0.1.1
 rem -----------------------------------------------------------------------------------------------
 rem User can modify those variables accoring to his system
 SET "GAME_FILE=GameFiles"
